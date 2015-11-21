@@ -23,7 +23,7 @@ E-Mail: rion4ik@gmail.com XMPP: rion@jabber.ru
 #define NOTESMODEL_H
 
 #include <QAbstractItemModel>
-#include "notestorage.h"
+#include "storage/notestorage.h"
 
 namespace QtNote {
 

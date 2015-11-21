@@ -160,7 +160,7 @@
   <customwidget>
    <class>QtNote::ColorButton</class>
    <extends>QWidget</extends>
-   <header>colorbutton.h</header>
+   <header>widgets/colorbutton.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

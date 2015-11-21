@@ -25,10 +25,10 @@ E-Mail: rion4ik@gmail.com XMPP: rion@jabber.ru
 #include <QSettings>
 #include <QDebug>
 
-#include "filestorage.h"
-#include "filestoragesettingswidget.h"
-#include "filenotedata.h"
-#include "filenameprovider.h"
+#include "storage/filestorage.h"
+#include "storage/filestoragesettingswidget.h"
+#include "storage/filenotedata.h"
+#include "storage/filenameprovider.h"
 
 namespace QtNote {
 

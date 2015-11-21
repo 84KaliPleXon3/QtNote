@@ -30,10 +30,10 @@ E-Mail: rion4ik@gmail.com XMPP: rion@jabber.ru
 #include <ShlObj.h>
 #endif // Q_OS_WIN
 
-#include "ptfstorage.h"
-#include "ptfdata.h"
+#include "storage/ptfstorage.h"
+#include "storage/ptfdata.h"
 #include "utils.h"
-#include "humanfilenameprovider.h"
+#include "storage/humanfilenameprovider.h"
 
 namespace QtNote {
 

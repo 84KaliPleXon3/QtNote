@@ -43,76 +43,79 @@ win32 {
     INSTALLS += target
 }
 
-SOURCES += qtnote_export.h \
+SOURCES += \
+    storage/note.cpp \
+    storage/notemanager.cpp \
+    storage/notestorage.cpp \
+    storage/ptfstorage.cpp \
+    storage/ptfdata.cpp \
+    storage/notedata.cpp \
+	storage/filenotedata.cpp \
+	storage/filestorage.cpp \
+	storage/filestoragesettingswidget.cpp \
+	storage/filenameprovider.cpp \
+	storage/humanfilenameprovider.cpp \
+	storage/uuidfilenameprovider.cpp \
+	widgets/noteedit.cpp \
+	widgets/typeaheadfind.cpp \
+	widgets/shortcutedit.cpp \
+	widgets/colorbutton.cpp \
 	notedialog.cpp \
-    note.cpp \
-    notemanager.cpp \
-    notestorage.cpp \
-    ptfstorage.cpp \
-    ptfdata.cpp \
-    notedata.cpp \
-    filenotedata.cpp \
-    aboutdlg.cpp \
+	aboutdlg.cpp \
     optionsdlg.cpp \
-    filestorage.cpp \
-    filestoragesettingswidget.cpp \
     utils.cpp \
     notesmodel.cpp \
     notemanagerdlg.cpp \
     notemanagerview.cpp \
-    noteedit.cpp \
-    qtnote.cpp \
-    typeaheadfind.cpp \
-    shortcutedit.cpp \
+	qtnote.cpp \
     shortcutsmanager.cpp \
     notewidget.cpp \
     pluginmanager.cpp \
     optionsplugins.cpp \
     notehighlighter.cpp \
-    colorbutton.cpp \
     notessearchmodel.cpp \
-    filenameprovider.cpp \
-    humanfilenameprovider.cpp \
-    uuidfilenameprovider.cpp
+    richtextadapter.cpp
 
-HEADERS += notedialog.h \
-    note.h \
-    notemanager.h \
-    notestorage.h \
-    ptfstorage.h \
-    ptfdata.h \
-    notedata.h \
-    filenotedata.h \
-    filestoragesettingswidget.h \
-    aboutdlg.h \
+HEADERS += qtnote_export.h \
+    storage/note.h \
+    storage/notemanager.h \
+    storage/notestorage.h \
+    storage/ptfstorage.h \
+    storage/ptfdata.h \
+    storage/notedata.h \
+	storage/filenotedata.h \
+    storage/filestoragesettingswidget.h \
+	storage/filestorage.h \
+	storage/filenameprovider.h \
+	storage/humanfilenameprovider.h \
+	storage/uuidfilenameprovider.h \
+	widgets/noteedit.h \
+	widgets/typeaheadfind.h \
+	widgets/shortcutedit.h \
+	widgets/colorbutton.h \
+	notedialog.h \
+	aboutdlg.h \
     optionsdlg.h \
-    filestorage.h \
     utils.h \
     notesmodel.h \
     notemanagerdlg.h \
     notemanagerview.h \
-    noteedit.h \
-    qtnote.h \
-    typeaheadfind.h \
-    shortcutedit.h \
+	qtnote.h \
     shortcutsmanager.h \
     notewidget.h \
     pluginmanager.h \
     optionsplugins.h \
     highlighterext.h \
     notehighlighter.h \
-    colorbutton.h \
     defaults.h \
     notessearchmodel.h \
-    filenameprovider.h \
-    humanfilenameprovider.h \
-    uuidfilenameprovider.h
+    richtextadapter.h
 
 FORMS += notedialog.ui \
     aboutdlg.ui \
     optionsdlg.ui \
     notemanagerdlg.ui \
-    filestoragesettingswidget.ui \
+    storage/filestoragesettingswidget.ui \
     notewidget.ui \
     optionsplugins.ui
 

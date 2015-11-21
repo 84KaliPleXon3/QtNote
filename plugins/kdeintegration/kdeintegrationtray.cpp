@@ -11,7 +11,7 @@
 #include <QDesktopWidget>
 
 #include "kdeintegrationtray.h"
-#include "notemanager.h"
+#include "storage/notemanager.h"
 #include "utils.h"
 #include "qtnote.h"
 

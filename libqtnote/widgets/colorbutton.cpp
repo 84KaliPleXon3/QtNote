@@ -4,7 +4,7 @@
 #include <QStyleOption>
 #include <QPainter>
 
-#include "colorbutton.h"
+#include "widgets/colorbutton.h"
 #include "utils.h"
 
 namespace QtNote {

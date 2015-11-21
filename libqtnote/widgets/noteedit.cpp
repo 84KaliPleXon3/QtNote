@@ -29,7 +29,7 @@ E-Mail: rion4ik@gmail.com XMPP: rion@jabber.ru
 #include <QTextBlock>
 #include <QTextLayout>
 
-#include "noteedit.h"
+#include "widgets/noteedit.h"
 
 namespace QtNote {
 

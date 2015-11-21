@@ -28,7 +28,7 @@ E-Mail: rion4ik@gmail.com XMPP: rion@jabber.ru
 #include <QLinkedList>
 #include <QPointer>
 
-#include "notestorage.h"
+#include "storage/notestorage.h"
 #include "qtnote_export.h"
 
 namespace QtNote {

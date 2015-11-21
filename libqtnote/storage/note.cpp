@@ -19,34 +19,50 @@ Contacts:
 E-Mail: rion4ik@gmail.com XMPP: rion@jabber.ru
 */
 
-#ifndef PTFSTORAGE_H
-#define PTFSTORAGE_H
-
-#include "filestorage.h"
+#include "storage/note.h"
+#include "storage/notedata.h"
+#include <QString>
 
 namespace QtNote {
 
-class PTFStorage : public FileStorage
+Note::Note()
 {
-    Q_OBJECT
-    Q_DISABLE_COPY(PTFStorage)
-    void initNotesDir();
 
-public:
-    PTFStorage(QObject *parent = 0);
-    bool init();
-    bool isAccessible() const;
-    const QString systemName() const;
-    const QString name() const;
-    QIcon storageIcon() const;
-    QIcon noteIcon() const;
-    QList<NoteListItem> noteListFromInfoList(const QFileInfoList &);
-    Note note(const QString &noteId);
-    QString saveNote(const QString &noteId, const QString &text);
-    bool isRichTextAllowed() const;
-    QString findStorageDir() const;
-};
+}
+
+Note::Note(NoteData *data)
+{
+	d = QSharedPointer<NoteData>(data);
+}
+
+bool Note::isNull()
+{
+	return !d;
+}
+
+void Note::toTrash()
+{
+	d->remove();
+}
+
+QString Note::text() const
+{
+	return d->text();
+}
+
+QString Note::title() const
+{
+	return d->title();
+}
+
+NoteData* Note::data() const
+{
+	return d.data();
+}
+
+qint64 Note::lastChangeElapsed() const
+{
+	return d->lastChangeElapsed();
+}
 
 } // namespace QtNote
-
-#endif // PTFSTORAGE_H

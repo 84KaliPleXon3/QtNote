@@ -19,24 +19,34 @@ Contacts:
 E-Mail: rion4ik@gmail.com XMPP: rion@jabber.ru
 */
 
-#ifndef PTFDATA_H
-#define PTFDATA_H
+#ifndef PTFSTORAGE_H
+#define PTFSTORAGE_H
 
-#include <QFile>
-#include <QPointer>
-#include <QDateTime>
-#include "filenotedata.h"
+#include "storage/filestorage.h"
 
 namespace QtNote {
 
-class PTFData : public FileNoteData
+class PTFStorage : public FileStorage
 {
+    Q_OBJECT
+    Q_DISABLE_COPY(PTFStorage)
+    void initNotesDir();
+
 public:
-	PTFData();
-	bool fromFile(QString);
-	bool saveToFile(const QString &fileName);
+    PTFStorage(QObject *parent = 0);
+    bool init();
+    bool isAccessible() const;
+    const QString systemName() const;
+    const QString name() const;
+    QIcon storageIcon() const;
+    QIcon noteIcon() const;
+    QList<NoteListItem> noteListFromInfoList(const QFileInfoList &);
+    Note note(const QString &noteId);
+    QString saveNote(const QString &noteId, const QString &text);
+    bool isRichTextAllowed() const;
+    QString findStorageDir() const;
 };
 
-}
+} // namespace QtNote
 
-#endif // PTFDATA_H
+#endif // PTFSTORAGE_H

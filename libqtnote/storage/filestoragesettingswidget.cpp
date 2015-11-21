@@ -1,8 +1,8 @@
 #include <QFileDialog>
 
-#include "filestoragesettingswidget.h"
+#include "storage/filestoragesettingswidget.h"
 #include "ui_filestoragesettingswidget.h"
-#include "filestorage.h"
+#include "storage/filestorage.h"
 
 FileStorageSettingsWidget::FileStorageSettingsWidget(const QString &customPath, QtNote::FileStorage *storage, QWidget *parent) :
     QWidget(parent),

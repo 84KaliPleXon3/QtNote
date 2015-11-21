@@ -1,7 +1,7 @@
 #include <QSet>
 
 #include "notehighlighter.h"
-#include "noteedit.h"
+#include "widgets/noteedit.h"
 
 namespace QtNote {
 

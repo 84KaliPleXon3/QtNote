@@ -21,7 +21,7 @@ E-Mail: rion4ik@gmail.com XMPP: rion@jabber.ru
 
 #include <QKeyEvent>
 
-#include "shortcutedit.h"
+#include "widgets/shortcutedit.h"
 #include "qtnote.h"
 #include "shortcutsmanager.h"
 

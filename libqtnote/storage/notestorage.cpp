@@ -19,50 +19,45 @@ Contacts:
 E-Mail: rion4ik@gmail.com XMPP: rion@jabber.ru
 */
 
-#include "note.h"
-#include "notedata.h"
-#include <QString>
+#include <QTimer>
+
+#include "storage/notestorage.h"
 
 namespace QtNote {
 
-Note::Note()
+bool noteListItemModifyComparer(const NoteListItem &a,
+                                const NoteListItem &b) {
+    return a.lastModify > b.lastModify; //backward order
+}
+
+NoteStorage::NoteStorage(QObject *parent)
+    : QObject(parent)
 {
 
 }
 
-Note::Note(NoteData *data)
+NoteFinder *NoteStorage::search()
 {
-	d = QSharedPointer<NoteData>(data);
+    return new NoteFinder(this);
 }
 
-bool Note::isNull()
+void NoteFinder::start(const QString &text)
 {
-	return !d;
+    auto nl = _storage->noteList();
+    for (auto n : nl) {
+        // text always returns plain text
+        if (_storage->note(n.id).text().contains(text)) {
+            emit found(n.id);
+        }
+    }
+
+    emit completed();
+    deleteLater();
 }
 
-void Note::toTrash()
+void NoteFinder::abort()
 {
-	d->remove();
-}
 
-QString Note::text() const
-{
-	return d->text();
-}
-
-QString Note::title() const
-{
-	return d->title();
-}
-
-NoteData* Note::data() const
-{
-	return d.data();
-}
-
-qint64 Note::lastChangeElapsed() const
-{
-	return d->lastChangeElapsed();
 }
 
 } // namespace QtNote

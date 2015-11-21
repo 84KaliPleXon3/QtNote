@@ -19,29 +19,30 @@ Contacts:
 E-Mail: rion4ik@gmail.com XMPP: rion@jabber.ru
 */
 
-#include "notedata.h"
+#ifndef FILENOTEDATA_H
+#define FILENOTEDATA_H
+
+#include "storage/notedata.h"
+#include <QDateTime>
 
 namespace QtNote {
 
-NoteData::NoteData()
-	: QSharedData()
+class QTNOTE_EXPORT FileNoteData : public NoteData
 {
-}
+public:
+    FileNoteData();
+    inline void setFile(const QString &fn) { sFileName = fn; }
+    virtual bool saveToFile(const QString &fileName) = 0;
+	QDateTime modifyTime() const;
+	qint64 lastChangeElapsed() const;
+	void remove();
 
-QString NoteData::title() const
-{
-	return sTitle;
-}
+protected:
+	QString sFileName;
+	QDateTime dtLastChange;
+	QDateTime dtCreate;
+};
 
-QString NoteData::text() const
-{
-	return sText;
-}
+} // namespace QtNote
 
-void NoteData::setText(const QString &text)
-{
-	sText = text.trimmed();
-	sTitle = sText.section('\n', 0, 0).trimmed().left(NoteData::TitleLength);
-}
-
-}
+#endif // FILENOTEDATA_H

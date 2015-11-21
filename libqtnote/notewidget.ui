@@ -33,7 +33,7 @@
   <customwidget>
    <class>QtNote::NoteEdit</class>
    <extends>QTextEdit</extends>
-   <header>noteedit.h</header>
+   <header>widgets/noteedit.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

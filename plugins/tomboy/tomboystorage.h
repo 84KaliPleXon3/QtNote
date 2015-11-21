@@ -24,7 +24,7 @@ E-Mail: rion4ik@gmail.com XMPP: rion@jabber.ru
 
 #include <QMap>
 
-#include "filestorage.h"
+#include "storage/filestorage.h"
 #include "tomboydata.h"
 
 namespace QtNote {

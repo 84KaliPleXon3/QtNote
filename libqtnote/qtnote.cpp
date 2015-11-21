@@ -21,14 +21,14 @@
 #endif
 
 #include "qtnote.h"
-#include "notemanager.h"
+#include "storage/notemanager.h"
 #include "notedialog.h"
 #include "notewidget.h"
 #include "aboutdlg.h"
 #include "optionsdlg.h"
 #include "notemanagerdlg.h"
 #include "utils.h"
-#include "ptfstorage.h"
+#include "storage/ptfstorage.h"
 #include "shortcutsmanager.h"
 #include "pluginmanager.h"
 #include "deintegrationinterface.h"

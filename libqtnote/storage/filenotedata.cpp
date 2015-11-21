@@ -19,45 +19,31 @@ Contacts:
 E-Mail: rion4ik@gmail.com XMPP: rion@jabber.ru
 */
 
-#include "ptfdata.h"
-#include <QIcon>
-#include <QFileInfo>
+#include "storage/filenotedata.h"
+#include <QFile>
 
 namespace QtNote {
 
-PTFData::PTFData()
-        : FileNoteData()
+FileNoteData::FileNoteData()
+	: NoteData()
 {
 
 }
 
-bool PTFData::fromFile(QString fn)
+QDateTime FileNoteData::modifyTime() const
 {
-    QFile file(fn);
-    if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
-        return false;
-    setText(QString::fromUtf8(file.readAll()));
-    setFile(fn);
-    file.close();
-    QFileInfo fi(fn);
-    dtCreate = fi.created();
-    dtLastChange = fi.lastModified();
-
-    return true;
+	return dtLastChange;
 }
 
-bool PTFData::saveToFile(const QString &fileName)
+qint64 FileNoteData::lastChangeElapsed() const
 {
-    QFile file(fileName);
-    if (!file.open(QIODevice::WriteOnly | QIODevice::Text)) {
-        qWarning("Failed to write: %s\n", qPrintable(file.errorString()));
-        return false;
-    }
-    file.write(sText.toUtf8());
-    setFile(fileName);
-    file.close();
-    dtLastChange = QFileInfo(file).lastModified();
-    return true;
+	return dtLastChange.msecsTo(QDateTime::currentDateTime());
+}
+
+void FileNoteData::remove()
+{
+	QFile f(sFileName);
+	f.remove();
 }
 
 } // namespace QtNote

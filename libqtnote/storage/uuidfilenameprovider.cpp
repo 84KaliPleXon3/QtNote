@@ -1,7 +1,7 @@
 #include <QUuid>
 
-#include "uuidfilenameprovider.h"
-#include "filenotedata.h"
+#include "storage/uuidfilenameprovider.h"
+#include "storage/filenotedata.h"
 
 namespace QtNote {
 

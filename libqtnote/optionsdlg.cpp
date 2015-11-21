@@ -27,10 +27,10 @@ E-Mail: rion4ik@gmail.com XMPP: rion@jabber.ru
 
 #include "optionsdlg.h"
 #include "ui_optionsdlg.h"
-#include "notemanager.h"
+#include "storage/notemanager.h"
 #include "qtnote.h"
 #include "shortcutsmanager.h"
-#include "shortcutedit.h"
+#include "widgets/shortcutedit.h"
 #include "pluginmanager.h"
 #include "optionsplugins.h"
 #include "utils.h"

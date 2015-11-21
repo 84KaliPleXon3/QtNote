@@ -26,10 +26,10 @@ E-Mail: rion4ik@gmail.com XMPP: rion@jabber.ru
 
 
 #include "utils.h"
-#include "typeaheadfind.h"
+#include "widgets/typeaheadfind.h"
 #include "notedialog.h"
 #include "ui_notedialog.h"
-#include "note.h"
+#include "storage/note.h"
 #include "notewidget.h"
 #include "utils.h"
 

@@ -3,7 +3,7 @@
 
 #include <QObject>
 
-#include "notemanager.h"
+#include "storage/notemanager.h"
 
 namespace QtNote {
 

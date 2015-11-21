@@ -24,7 +24,7 @@ E-Mail: rion4ik@gmail.com XMPP: rion@jabber.ru
 
 #include "notemanagerview.h"
 #include "notesmodel.h"
-#include "notemanager.h"
+#include "storage/notemanager.h"
 
 namespace QtNote {
 

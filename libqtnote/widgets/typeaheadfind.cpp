@@ -19,7 +19,7 @@
  *
  */
 
-#include "typeaheadfind.h"
+#include "widgets/typeaheadfind.h"
 
 #include <QAction>
 #include <QLineEdit>

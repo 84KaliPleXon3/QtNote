@@ -26,7 +26,7 @@ E-Mail: rion4ik@gmail.com XMPP: rion@jabber.ru
 #include <QDateTime>
 #include <QIcon>
 
-#include "note.h"
+#include "storage/note.h"
 #include "qtnote_export.h"
 
 namespace QtNote {

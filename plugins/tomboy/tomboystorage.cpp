@@ -27,7 +27,7 @@ E-Mail: rion4ik@gmail.com XMPP: rion@jabber.ru
 #include "tomboystorage.h"
 #include "tomboydata.h"
 #include "utils.h"
-#include "uuidfilenameprovider.h"
+#include "storage/uuidfilenameprovider.h"
 
 namespace QtNote {
 

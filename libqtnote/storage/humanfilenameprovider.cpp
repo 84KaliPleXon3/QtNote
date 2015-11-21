@@ -1,7 +1,7 @@
 #include <QString>
 
-#include "humanfilenameprovider.h"
-#include "filenotedata.h"
+#include "storage/humanfilenameprovider.h"
+#include "storage/filenotedata.h"
 
 namespace QtNote {
 

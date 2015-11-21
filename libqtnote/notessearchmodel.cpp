@@ -1,5 +1,5 @@
 #include "notessearchmodel.h"
-#include "notemanager.h"
+#include "storage/notemanager.h"
 #include "notesmodel.h"
 
 namespace QtNote {

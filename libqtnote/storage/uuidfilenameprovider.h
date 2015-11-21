@@ -1,7 +1,7 @@
 #ifndef QTNOTE_UUIDFILENAMEPROVIDER_H
 #define QTNOTE_UUIDFILENAMEPROVIDER_H
 
-#include "filenameprovider.h"
+#include "storage/filenameprovider.h"
 
 namespace QtNote {
 

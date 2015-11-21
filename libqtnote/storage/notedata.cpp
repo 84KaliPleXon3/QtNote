@@ -19,34 +19,29 @@ Contacts:
 E-Mail: rion4ik@gmail.com XMPP: rion@jabber.ru
 */
 
-#ifndef NOTE_H
-#define NOTE_H
-
-#include <QSharedPointer>
-
-
-//class NoteData;
-#include "notedata.h"
+#include "storage/notedata.h"
 
 namespace QtNote {
 
-class QTNOTE_EXPORT Note
+NoteData::NoteData()
+	: QSharedData()
 {
-public:
-	Note();
-	Note(NoteData *data);
+}
 
-	bool isNull();
-	void toTrash();
-	QString text() const;
-	QString title() const;
-	NoteData* data() const;
-	qint64 lastChangeElapsed() const;
+QString NoteData::title() const
+{
+	return sTitle;
+}
 
-private:
-	QSharedPointer<NoteData> d;
-};
+QString NoteData::text() const
+{
+	return sText;
+}
 
-} // namespace QtNote
+void NoteData::setText(const QString &text)
+{
+	sText = text.trimmed();
+	sTitle = sText.section('\n', 0, 0).trimmed().left(NoteData::TitleLength);
+}
 
-#endif // NOTE_H
+}

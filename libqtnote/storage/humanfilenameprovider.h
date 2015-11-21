@@ -1,7 +1,7 @@
 #ifndef QTNOTE_HUMANFILENAMEPROVIDER_H
 #define QTNOTE_HUMANFILENAMEPROVIDER_H
 
-#include "filenameprovider.h"
+#include "storage/filenameprovider.h"
 
 namespace QtNote {
 
