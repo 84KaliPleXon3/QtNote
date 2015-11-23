@@ -40,12 +40,12 @@ public:
     FileStorage(QObject *parent);
     QString createNote(const QString &text);
     void deleteNote(const QString &noteId);
-    virtual void putToCache(const NoteListItem &note, const QString &oldNoteId);
+    virtual void putToCache(const Note &note, const QString &oldNoteId);
     virtual QString findStorageDir() const = 0;
     QWidget *settingsWidget();
     QString tooltip();
-    QList<NoteListItem> noteList(int limit = 0);
-    virtual QList<NoteListItem> noteListFromInfoList(const QFileInfoList &) = 0;
+    QList<Note> noteList(int limit = 0);
+    virtual QList<Note> noteListFromInfoList(const QFileInfoList &) = 0;
 
 protected:
     QString saveNoteToFile(FileNoteData &note, const QString &text, const QString &noteId = QString::null);
@@ -56,8 +56,9 @@ protected slots:
     void settingsApplied();
 
 protected:
+    friend class FileNoteData;
     QString fileExt;
-    QHash<QString, NoteListItem> cache;
+    QHash<QString, Note> cache;
     bool _cacheValid; /* last limit passed to noteList() */
     QString notesDir;
     FileNameProvider *nameProvider;

@@ -19,24 +19,30 @@ Contacts:
 E-Mail: rion4ik@gmail.com XMPP: rion@jabber.ru
 */
 
-#include "storage/ptfdata.h"
 #include <QIcon>
 #include <QFileInfo>
 
+#include "storage/ptfdata.h"
+#include "notestorage.h"
+
 namespace QtNote {
 
-PTFData::PTFData()
-        : FileNoteData()
+bool PTFData::save()
 {
-
+    QByteArray ba = _storage->richTextAdapter().dumpDocument(_text);
+    saveData(ba);
 }
 
+#if 0
 bool PTFData::fromFile(QString fn)
 {
     QFile file(fn);
     if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
         return false;
-    setText(QString::fromUtf8(file.readAll()));
+    //setPlainText(QString::fromUtf8(file.readAll()));
+
+    //_text = _storage->richTextAdapter()->toDocument(file.readAll());
+
     setFile(fn);
     file.close();
     QFileInfo fi(fn);
@@ -59,5 +65,5 @@ bool PTFData::saveToFile(const QString &fileName)
     dtLastChange = QFileInfo(file).lastModified();
     return true;
 }
-
+#endif
 } // namespace QtNote

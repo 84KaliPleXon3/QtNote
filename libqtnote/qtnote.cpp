@@ -236,7 +236,7 @@ void Main::showOptions()
     activateWidget(d);
 }
 
-NoteWidget* Main::noteWidget(const QString &storageId, const QString &noteId, const QString &contents)
+NoteWidget* Main::noteWidget(const QString &storageId, const QString &noteId)
 {
     Note note;
     if (!noteId.isEmpty()) {
@@ -249,21 +249,21 @@ NoteWidget* Main::noteWidget(const QString &storageId, const QString &noteId, co
 
     NoteWidget *w = new NoteWidget(storageId, noteId);
     w->setAcceptRichText(NoteManager::instance()->storage(storageId)
-                         ->isRichTextAllowed());
+                        ->isRichTextAllowed());
+
     emit noteWidgetCreated(w);
-    if (noteId.isEmpty()) {
-        if (!contents.isEmpty()) {
-            w->setText(contents);
-        }
-    } else {
+    if (!note.isNull()) {
 #ifdef MAIN_DEBUG
         qDebug() << "Main::noteWidget";
 #endif
+        w->setDocument(note->document());
+#if 0
         if (note.text().startsWith(note.title())) {
             w->setText(note.text());
         } else {
             w->setText(note.title() + "\n" + note.text());
         }
+#endif
     }
 
     connect(this, SIGNAL(settingsUpdated()), w, SLOT(rereadSettings()));
@@ -274,7 +274,7 @@ NoteWidget* Main::noteWidget(const QString &storageId, const QString &noteId, co
     return w;
 }
 
-void Main::showNoteDialog(const QString &storageId, const QString &noteId, const QString &contents)
+void Main::showNoteDialog(const QString &storageId, const QString &noteId)
 {
 
     NoteDialog *dlg = 0;
@@ -284,7 +284,7 @@ void Main::showNoteDialog(const QString &storageId, const QString &noteId, const
     }
 
     if (!dlg) {
-        auto nw = noteWidget(storageId, noteId, contents);
+        auto nw = noteWidget(storageId, noteId);
         if (!nw) {
             return;
         }
@@ -328,7 +328,7 @@ void Main::setNotificationImpl(NotificationInterface *notifier)
 void Main::registerStorage(NoteStorage::Ptr &storage)
 {
     NoteManager::instance()->registerStorage(storage);
-    connect(storage.data(), SIGNAL(noteRemoved(NoteListItem)), SLOT(note_removed(NoteListItem)));
+    connect(storage.data(), SIGNAL(noteRemoved(Note)), SLOT(note_removed(Note)));
     connect(storage.data(), SIGNAL(storageErorr(QString)), SLOT(notifyError(QString)));
 }
 
@@ -411,7 +411,9 @@ void Main::createNewNoteFromSelection()
     contents = QApplication::clipboard()->text();
 #endif
     if (contents.size()) {
-        showNoteDialog(NoteManager::instance()->defaultStorage()->systemName(), QString(), contents);
+        auto storage = NoteManager::instance()->defaultStorage();
+        QString noteId = storage->createNote(contents);
+        showNoteDialog(storage->systemName(), noteId);
     }
 }
 
@@ -472,7 +474,7 @@ void Main::note_invalidated()
     }
 }
 
-void Main::note_removed(const NoteListItem &noteItem)
+void Main::note_removed(const Note &noteItem)
 {
     NoteDialog *dlg = NoteDialog::findDialog(noteItem.storageId, noteItem.id);
     if (dlg) {

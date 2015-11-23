@@ -24,28 +24,50 @@ E-Mail: rion4ik@gmail.com XMPP: rion@jabber.ru
 
 #include <QSharedData>
 #include <QString>
+#include <QDateTime>
+#include <QVariant>
 
 #include "qtnote_export.h"
 
+class QTextDocument;
+
 namespace QtNote {
+
+class NoteStorage;
 
 class QTNOTE_EXPORT NoteData : public QSharedData
 {
 public:
 	static const int TitleLength = 256;
 
-	NoteData();
-	virtual ~NoteData() {}
-	virtual void remove() = 0;
-	virtual QString text() const;
-	virtual QString title() const;
-	virtual void setText(const QString &text);
-	virtual qint64 lastChangeElapsed() const = 0;
+    NoteData(NoteStorage *storage);
+    NoteData(NoteStorage *storage, const QString &noteId);
+
+    virtual ~NoteData();
+    inline const QString &id() const { return _id; }
+    inline NoteStorage* storage() const { return _storage; }
+
+    virtual QString plainText();
+    virtual void setPlainText(const QString &text);
+    QTextDocument* document();
+    void setDocument(QTextDocument *doc);
+
+    inline const QDateTime &lastModify() const { return _lastModify; }
+
+    virtual void  remove() = 0;
+    virtual QString title() const;
+    virtual QVariant uiCmpValue() const;
 
 protected:
-	QString sTitle;
-	QString sText;
+    virtual bool load() = 0;
+    virtual bool save() = 0;
 
+protected:
+    QString _id;
+    NoteStorage *_storage;
+    QString _title;
+    QTextDocument *_text;
+    QDateTime _lastModify; // that's bad to use it only for sorting. actually each storage sould provide its way for best sorting
 };
 
 } // namespace QtNote

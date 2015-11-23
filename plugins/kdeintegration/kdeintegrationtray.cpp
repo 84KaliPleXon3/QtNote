@@ -54,7 +54,7 @@ void KDEIntegrationTray::showNotes(bool active, const QPoint &pos)
 	menu.addAction(actNew);
 	menu.addSeparator();
 	QSettings s;
-	QList<NoteListItem> notes = NoteManager::instance()->noteList(
+	QList<Note> notes = NoteManager::instance()->noteList(
 								s.value("ui.menu-notes-amount", 15).toInt());
 	for (int i=0; i<notes.count(); i++) {
         menu.addAction(NoteManager::instance()->storage(notes[i].storageId)->noteIcon(),
@@ -88,7 +88,7 @@ void KDEIntegrationTray::showNotes(bool active, const QPoint &pos)
 	QAction *act = menu.exec(mr.topLeft());
 
 	if (act && act != actNew) {
-		NoteListItem &note = notes[act->data().toInt()];
+		Note &note = notes[act->data().toInt()];
 		emit showNoteTriggered(note.storageId, note.id);
 	}
 }

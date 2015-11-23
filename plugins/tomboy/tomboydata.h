@@ -40,6 +40,7 @@ protected:
 	int iCursor;
 	int iWidth;
 	int iHeight;
+    QDateTime dtCreate;
 };
 
 #endif // TOMBOYDATA_H

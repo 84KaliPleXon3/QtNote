@@ -45,7 +45,7 @@ bool TomboyData::fromFile(QString fn)
 	QDomElement root = dom.documentElement();
 	sTitle = nodeText(root.namedItem("title"));
 	sText = nodeText(root.namedItem("text"));
-	dtLastChange = QDateTime::fromString(nodeText(root.namedItem("last-change-date")), Qt::ISODate);
+    _lastChange = QDateTime::fromString(nodeText(root.namedItem("last-change-date")), Qt::ISODate);
 	//dtLastMetadataChange = QDateTime::fromString(nodeText(root.namedItem("last-metadata-change-date")), Qt::ISODate);
 	dtCreate = QDateTime::fromString(nodeText(root.namedItem("create-date")), Qt::ISODate);
 	iCursor = nodeText(root.namedItem("create-date")).toInt();

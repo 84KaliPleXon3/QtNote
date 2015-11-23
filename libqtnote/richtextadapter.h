@@ -27,7 +27,9 @@ class RichTextAdapter : public QObject
 public:
     explicit RichTextAdapter(QObject *parent = 0);
     virtual Caps caps() const = 0;
-//    QTextDocument* makeDocument(const QString &)
+
+    virtual void populateDocumentFromData(QTextDocument *doc, const QByteArray &srcData) = 0;
+    virtual QByteArray dumpDocument(QTextDocument *doc) = 0; // FIXME tomboy we need to return QDocumentFragment
 
 
 signals:

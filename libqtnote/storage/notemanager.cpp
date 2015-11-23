@@ -95,10 +95,10 @@ void NoteManager::registerStorage(NoteStorage::Ptr storage)
     }
 
     connect(storage.data(), SIGNAL(invalidated()), SLOT(storageChanged()));
-    connect(storage.data(), SIGNAL(noteAdded(NoteListItem)), SLOT(storageChanged()));
-    connect(storage.data(), SIGNAL(noteModified(NoteListItem)), SLOT(storageChanged()));
-    connect(storage.data(), SIGNAL(noteRemoved(NoteListItem)), SLOT(storageChanged()));
-    connect(storage.data(), SIGNAL(noteIdChanged(NoteListItem,QString)), SLOT(storageChanged()));
+    connect(storage.data(), SIGNAL(noteAdded(Note)), SLOT(storageChanged()));
+    connect(storage.data(), SIGNAL(noteModified(Note)), SLOT(storageChanged()));
+    connect(storage.data(), SIGNAL(noteRemoved(Note)), SLOT(storageChanged()));
+    connect(storage.data(), SIGNAL(noteIdChanged(Note,QString)), SLOT(storageChanged()));
 
     emit storageAdded(storage);
 }
@@ -126,13 +126,13 @@ void NoteManager::storageChanged()
     emit storageChanged(_storages[((NoteStorage*)sender())->systemName()]);
 }
 
-QList<NoteListItem> NoteManager::noteList(int count) const
+QList<Note> NoteManager::noteList(int count) const
 {
-    QList<NoteListItem> ret;
+    QList<Note> ret;
     foreach (NoteStorage::Ptr storage, prioritizedStorages()) {
         ret += storage->noteList(count);
     }
-    qSort(ret.begin(), ret.end(), noteListItemModifyComparer);
+    qSort(ret.begin(), ret.end(), NoteUiComparer);
     return ret.mid(0, count);
 }
 

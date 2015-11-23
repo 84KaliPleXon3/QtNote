@@ -47,11 +47,11 @@ QString FileStorage::createNote(const QString &text)
 
 void FileStorage::deleteNote(const QString &noteId)
 {
-    QHash<QString, NoteListItem>::const_iterator r = cache.find(noteId);
+    QHash<QString, Note>::const_iterator r = cache.find(noteId);
     if (r != cache.end()) {
         if (QFile::remove( QDir(notesDir).absoluteFilePath(
                 QString("%1.%2").arg(noteId).arg(fileExt)) )) {
-            NoteListItem item = r.value();
+            Note item = r.value();
             cache.remove(r.key());
             emit noteRemoved(item);
         }
@@ -63,7 +63,7 @@ QString FileStorage::saveNoteToFile(FileNoteData &note, const QString &text, con
     QString newNoteId = noteId;
     QString fileName;
 
-    note.setText(text);
+    note.setPlainText(text);
     if (noteId.isEmpty()) {
         fileName = nameProvider->newName(note, newNoteId);
     } else {
@@ -75,7 +75,7 @@ QString FileStorage::saveNoteToFile(FileNoteData &note, const QString &text, con
             QFile(nameProvider->fileNameForUid(noteId)).remove();
         }
 
-        NoteListItem item(newNoteId, systemName(), note.title(), note.modifyTime());
+        Note item(newNoteId, systemName(), note.title(), note.modifyTime());
         putToCache(item, noteId); // noteId is old one. new one is in item.id
         return newNoteId;
     }
@@ -91,7 +91,7 @@ void FileStorage::handleFSError()
     emit invalidated();
 }
 
-void FileStorage::putToCache(const NoteListItem &note, const QString &oldNoteId)
+void FileStorage::putToCache(const Note &note, const QString &oldNoteId)
 {
     bool isModify;
     bool idChange = false;
@@ -169,11 +169,11 @@ void FileStorage::ensureChachePopulated()
     }
 }
 
-QList<NoteListItem> FileStorage::noteList(int limit)
+QList<Note> FileStorage::noteList(int limit)
 {
     ensureChachePopulated();
-    QList<NoteListItem> ret = cache.values();
-    qSort(ret.begin(), ret.end(), noteListItemModifyComparer);
+    QList<Note> ret = cache.values();
+    qSort(ret.begin(), ret.end(), NoteUiComparer);
     // probably sort is unnecesary here if the only accessor is notemanager which also does sorting.
     return limit ? ret.mid(0, limit) : ret;
 }

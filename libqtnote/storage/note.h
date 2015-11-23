@@ -24,11 +24,16 @@ E-Mail: rion4ik@gmail.com XMPP: rion@jabber.ru
 
 #include <QSharedPointer>
 
-
 //class NoteData;
-#include "storage/notedata.h"
+//#include "storage/notedata.h"
+#include "qtnote_export.h"
+
+class QTextDocument;
 
 namespace QtNote {
+
+class NoteData;
+class NoteStorage;
 
 class QTNOTE_EXPORT Note
 {
@@ -36,12 +41,17 @@ public:
 	Note();
 	Note(NoteData *data);
 
+    QString id() const;
+    NoteStorage* storage() const;
 	bool isNull();
-	void toTrash();
-	QString text() const;
+    void remove();
+    QString plainText() const;
+    void setPlainText(const QString &text);
+    QTextDocument *document() const;
+    void setDocument(QTextDocument* doc);
 	QString title() const;
 	NoteData* data() const;
-	qint64 lastChangeElapsed() const;
+    bool uiCmp(const Note &other) const;
 
 private:
 	QSharedPointer<NoteData> d;

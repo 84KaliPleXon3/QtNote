@@ -41,7 +41,7 @@ public:
     const QString name() const;
     QIcon storageIcon() const;
     QIcon noteIcon() const;
-    QList<NoteListItem> noteListFromInfoList(const QFileInfoList &);
+    QList<Note> noteListFromInfoList(const QFileInfoList &);
     Note note(const QString &id);
     QString saveNote(const QString &noteId, const QString &text);
     bool isRichTextAllowed() const;

@@ -33,23 +33,10 @@ namespace QtNote {
 
 class NoteStorage;
 class NoteFinder;
+class RichTextAdapter;
 
-struct NoteListItem
-{
-    NoteListItem(const QString &id_, const QString &storageId_,
-                 const QString &title_,const QDateTime &lastModify_)
-        : id(id_)
-        , storageId(storageId_)
-        , title(title_)
-        , lastModify(lastModify_) { }
-    QString id;
-    QString storageId;
-    QString title;
-    QDateTime lastModify;
-};
-
-bool noteListItemModifyComparer(const NoteListItem &a,
-                                const NoteListItem &b);
+bool NoteUiComparer(const Note &a,
+                                const Note &b);
 
 class QTNOTE_EXPORT NoteStorage : public QObject
 {
@@ -66,7 +53,7 @@ public:
     virtual bool isAccessible() const = 0;
 
     /* 0 - not limit */
-    virtual QList<NoteListItem> noteList(int limit = 0) = 0;
+    virtual QList<Note> noteList(int limit = 0) = 0;
 
     /* should return null note (d=0) if not is not found */
     virtual Note note(const QString &id) = 0;
@@ -77,16 +64,17 @@ public:
     virtual QString saveNote(const QString &noteId, const QString &text) = 0;
     virtual void deleteNote(const QString &noteId) = 0;
     virtual bool isRichTextAllowed() const = 0;
+    virtual RichTextAdapter* richTextAdapter() = 0;
     virtual NoteFinder* search();
 
     virtual QWidget* settingsWidget() { return 0; }
     virtual QString tooltip() { return QString(); }
 
 signals:
-    void noteAdded(const NoteListItem &);
-    void noteModified(const NoteListItem &);
-    void noteRemoved(const NoteListItem &);
-    void noteIdChanged(const NoteListItem &note, const QString &oldNoteId);
+    void noteAdded(const Note &);
+    void noteModified(const Note &);
+    void noteRemoved(const Note &);
+    void noteIdChanged(const Note &note, const QString &oldNoteId);
     void invalidated();
     void storageErorr(const QString &);
 };

@@ -19,9 +19,13 @@ Contacts:
 E-Mail: rion4ik@gmail.com XMPP: rion@jabber.ru
 */
 
+#include <QString>
+#include <QVariant>
+#include <QHash>
+#include <QTextDocument>
+
 #include "storage/note.h"
 #include "storage/notedata.h"
-#include <QString>
 
 namespace QtNote {
 
@@ -32,7 +36,17 @@ Note::Note()
 
 Note::Note(NoteData *data)
 {
-	d = QSharedPointer<NoteData>(data);
+    d = QSharedPointer<NoteData>(data);
+}
+
+QString Note::id() const
+{
+    return d->id();
+}
+
+NoteStorage *Note::storage() const
+{
+    return d->storage();
 }
 
 bool Note::isNull()
@@ -40,14 +54,29 @@ bool Note::isNull()
 	return !d;
 }
 
-void Note::toTrash()
+void Note::remove()
 {
-	d->remove();
+    d->remove();
 }
 
-QString Note::text() const
+QString Note::plainText() const
 {
-	return d->text();
+    return d->plainText();
+}
+
+void Note::setPlainText(const QString &text)
+{
+    d->setPlainText(text);
+}
+
+QTextDocument* Note::document() const
+{
+    return d->document();
+}
+
+void Note::setDocument(QTextDocument *doc)
+{
+    d->setDocument(doc);
 }
 
 QString Note::title() const
@@ -57,12 +86,28 @@ QString Note::title() const
 
 NoteData* Note::data() const
 {
-	return d.data();
+    return d.data();
 }
 
-qint64 Note::lastChangeElapsed() const
+typedef bool (*uiNotesComparer)(const QVariant &a, const QVariant &b);
+static QHash<QVariant::Type,uiNotesComparer> uiComparers;
+static QVariant::Type uiCmpPrevType = QVariant::Invalid;
+static uiNotesComparer uiCmpPrev;
+
+bool Note::uiCmp(const Note &other) const
 {
-	return d->lastChangeElapsed();
+    QVariant v = d->uiCmpValue();
+    QVariant ov = other.d->uiCmpValue();
+    if (v.type() == ov.type()) {
+        if (v.type() != uiCmpPrevType) {
+            uiCmpPrevType = v.type();
+            uiCmpPrev = uiComparers.value(uiCmpPrevType);
+        }
+        if (uiCmpPrev) {
+            return uiCmpPrev(v, ov);
+        }
+    }
+    return title().compare(other.title(), Qt::CaseInsensitive) > 0;
 }
 
 } // namespace QtNote

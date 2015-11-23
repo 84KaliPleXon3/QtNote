@@ -32,9 +32,17 @@ namespace QtNote {
 class PTFData : public FileNoteData
 {
 public:
-	PTFData();
+    inline PTFData(NoteStorage *storage)
+        : FileNoteData(storage) {}
+    inline PTFData(NoteStorage *storage, const QString &noteId)
+        : FileNoteData(storage, noteId) {}
+
+protected:
+    bool save();
+#if 0
 	bool fromFile(QString);
 	bool saveToFile(const QString &fileName);
+#endif
 };
 
 }

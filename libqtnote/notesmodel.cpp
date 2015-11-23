@@ -21,6 +21,7 @@ E-Mail: rion4ik@gmail.com XMPP: rion@jabber.ru
 
 #include <QStringList>
 #include <QMimeData>
+#include <QTextDocument>
 
 #include "notesmodel.h"
 #include "storage/notemanager.h"
@@ -40,11 +41,11 @@ public:
         populateChildren();
     }
 
-    NMMItem(const NoteListItem &note, NMMItem *parent)
+    NMMItem(const Note &note, NMMItem *parent)
         : parent(parent)
         , type(NotesModel::ItemNote)
-        , title(note.title)
-        , id(note.id)
+        , title(note.title())
+        , id(note.id())
     {
 
     }
@@ -58,7 +59,7 @@ public:
     {
         if (type == NotesModel::ItemStorage) {
             auto storage = NoteManager::instance()->storage(id);
-            foreach (const NoteListItem &note, storage->noteList()) {
+            foreach (const Note &note, storage->noteList()) {
                 children.append(new NMMItem(note, this));
             }
         }
@@ -102,9 +103,9 @@ NotesModel::~NotesModel()
 
 void NotesModel::setStorageSignalHandlers(NoteStorage::Ptr s)
 {
-    connect(s.data(), SIGNAL(noteAdded(NoteListItem)), SLOT(noteAdded(NoteListItem)));
-    connect(s.data(), SIGNAL(noteModified(NoteListItem)), SLOT(noteModified(NoteListItem)));
-    connect(s.data(), SIGNAL(noteRemoved(NoteListItem)), SLOT(noteRemoved(NoteListItem)));
+    connect(s.data(), SIGNAL(noteAdded(Note)), SLOT(noteAdded(Note)));
+    connect(s.data(), SIGNAL(noteModified(Note)), SLOT(noteModified(Note)));
+    connect(s.data(), SIGNAL(noteRemoved(Note)), SLOT(noteRemoved(Note)));
     connect(s.data(), SIGNAL(invalidated()), SLOT(storageInvalidated()));
 }
 
@@ -170,9 +171,9 @@ void NotesModel::storageInvalidated()
     endResetModel();
 }
 
-void NotesModel::noteAdded(const NoteListItem &item)
+void NotesModel::noteAdded(const Note &item)
 {
-    QModelIndex parentIndex = storageIndex(item.storageId);
+    QModelIndex parentIndex = storageIndex(item.storage()->systemName());
     if (parentIndex.isValid()) {
         NMMItem *storage = static_cast<NMMItem*>(parentIndex.internalPointer());
         int len = rowCount(parentIndex);
@@ -183,19 +184,19 @@ void NotesModel::noteAdded(const NoteListItem &item)
     }
 }
 
-void NotesModel::noteModified(const NoteListItem &note)
+void NotesModel::noteModified(const Note &note)
 {
-    QModelIndex index = noteIndex(note.storageId, note.id);
+    QModelIndex index = noteIndex(note.storage()->systemName(), note.id());
     if (index.isValid()) {
         NMMItem *noteItem = static_cast<NMMItem*>(index.internalPointer());
-        noteItem->title = note.title;
+        noteItem->title = note.title();
         emit dataChanged(index, index);
     }
 }
 
-void NotesModel::noteRemoved(const NoteListItem &item)
+void NotesModel::noteRemoved(const Note &item)
 {
-    QModelIndex index = noteIndex(item.storageId, item.id);
+    QModelIndex index = noteIndex(item.storage()->systemName(), item.id());
     if (index.isValid()) {
         removeRow(index.row(), index.parent());
         emit statsChanged();
@@ -384,8 +385,8 @@ bool NotesModel::dropMimeData(const QMimeData *data, Qt::DropAction action, int 
         }
         auto srcStorage = NoteManager::instance()->storage(storageId);
         Note note = srcStorage->note(noteId);
-        if (!note.text().isEmpty()) {
-            dstStorage->createNote(note.text());
+        if (!note.document()->isEmpty()) {
+            dstStorage->createNote(note.document());
             srcStorage->deleteNote(noteId);
             // FIXME consider rich text
             // TODO copy timestamp as well

@@ -78,13 +78,13 @@ QIcon TomboyStorage::noteIcon() const
     return QIcon(":/icons/tomboynote");
 }
 
-QList<NoteListItem> TomboyStorage::noteListFromInfoList(const QFileInfoList &files)
+QList<Note> TomboyStorage::noteListFromInfoList(const QFileInfoList &files)
 {
-    QList<NoteListItem> ret;
+    QList<Note> ret;
     foreach (QFileInfo fi, files) {
         TomboyData note;
         if (note.fromFile(fi.canonicalFilePath())) {
-            NoteListItem li(nameProvider->uidForFileName(fi.fileName()), systemName(), note.title(),
+            Note li(nameProvider->uidForFileName(fi.fileName()), systemName(), note.title(),
                             note.modifyTime());
             ret.append(li);
         }

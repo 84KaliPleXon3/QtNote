@@ -65,7 +65,7 @@ public:
     void unregisterStorage(NoteStorage::Ptr storage);
     bool loadAll();
 
-    QList<NoteListItem> noteList(int count = -1) const;
+    QList<Note> noteList(int count = -1) const;
 
     Note note(const QString &storageId, const QString &noteId);
 

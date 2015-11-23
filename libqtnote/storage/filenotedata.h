@@ -30,17 +30,26 @@ namespace QtNote {
 class QTNOTE_EXPORT FileNoteData : public NoteData
 {
 public:
-    FileNoteData();
+    inline FileNoteData(NoteStorage *storage)
+        : NoteData(storage) {}
+    inline FileNoteData(NoteStorage *storage, const QString &noteId)
+        : NoteData(storage, noteId) {}
+
+#if 0
     inline void setFile(const QString &fn) { sFileName = fn; }
     virtual bool saveToFile(const QString &fileName) = 0;
-	QDateTime modifyTime() const;
+#endif
+    QDateTime modifyTime() const;
 	qint64 lastChangeElapsed() const;
 	void remove();
+    QVariant uiCmpValue() const;
 
 protected:
-	QString sFileName;
-	QDateTime dtLastChange;
-	QDateTime dtCreate;
+    bool load();
+    void saveData(const QByteArray &data);
+
+protected:
+    QDateTime _lastChange;
 };
 
 } // namespace QtNote

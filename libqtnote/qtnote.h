@@ -39,7 +39,7 @@ class TrayImpl;
 class DEIntegrationInterface;
 class GlobalShortcutsInterface;
 class NotificationInterface;
-struct NoteListItem;
+struct Note;
 
 class QTNOTE_EXPORT Main : public QObject
 {
@@ -50,7 +50,7 @@ public:
     inline bool isOperable() const { return _inited; }
     void parseAppArguments(const QStringList &args);
 
-    NoteWidget *noteWidget(const QString &storageId, const QString &noteId, const QString &contents = QString::null);
+    NoteWidget *noteWidget(const QString &storageId, const QString &noteId);
     void activateWidget(QWidget *w) const;
     inline ShortcutsManager* shortcutsManager() const { return _shortcutsManager; }
     inline PluginManager* pluginManager() const { return _pluginManager; }
@@ -70,7 +70,7 @@ signals:
 
 public slots:
     void notifyError(const QString &);
-    void showNoteDialog(const QString &storageId, const QString &noteId = QString::null, const QString &contents = QString::null);
+    void showNoteDialog(const QString &storageId, const QString &noteId = QString::null);
 
 private slots:
     void exitQtNote();
@@ -83,7 +83,7 @@ private slots:
     void note_trashRequested();
     void note_saveRequested();
     void note_invalidated();
-    void note_removed(const NoteListItem &noteItem);
+    void note_removed(const Note &noteItem);
 
 private:
     class Private;

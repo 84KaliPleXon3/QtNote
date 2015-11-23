@@ -95,22 +95,20 @@ QIcon PTFStorage::noteIcon() const
     return QIcon(":/icons/trayicon");
 }
 
-QList<NoteListItem> PTFStorage::noteListFromInfoList(const QFileInfoList &files)
+QList<Note> PTFStorage::noteListFromInfoList(const QFileInfoList &files)
 {
-    QList<NoteListItem> ret;
+    QList<Note> ret;
     foreach (QFileInfo fi, files) {
-        PTFData note;
-        if (note.fromFile(fi.canonicalFilePath())) {
-            NoteListItem li(nameProvider->uidForFileName(fi.fileName()), systemName(), note.title(),
-                            note.modifyTime());
-            ret.append(li);
-        }
+        QString noteId = nameProvider->uidForFileName(fi.fileName());
+        ret.append(Note(new PTFData(this, noteId)));
     }
     return ret;
 }
 
 Note PTFStorage::note(const QString &noteId)
 {
+    return Note(new PTFData(this, noteId));
+#if 0
     if (!noteId.isEmpty()) {
         QString fileName = QDir(notesDir).absoluteFilePath(
                 QString("%1.%2").arg(noteId).arg(fileExt) );
@@ -123,12 +121,14 @@ Note PTFStorage::note(const QString &noteId)
         handleFSError();
     }
     return Note();
+#endif
 }
 
-QString PTFStorage::saveNote(const QString &noteId, const QString & text)
+QString PTFStorage::saveNote(const QString &noteId, QTextDocument *text)
 {
-    PTFData note;
-    return saveNoteToFile(note, text, noteId);
+    Note n(new PTFData(this, noteId));
+    n.setDocument(text);
+    return n.save();
 }
 
 bool PTFStorage::isRichTextAllowed() const

@@ -40,9 +40,9 @@ public:
     const QString name() const;
     QIcon storageIcon() const;
     QIcon noteIcon() const;
-    QList<NoteListItem> noteListFromInfoList(const QFileInfoList &);
+    QList<Note> noteListFromInfoList(const QFileInfoList &);
     Note note(const QString &noteId);
-    QString saveNote(const QString &noteId, const QString &text);
+    QString saveNote(const QString &noteId, QTextDocument *text);
     bool isRichTextAllowed() const;
     QString findStorageDir() const;
 };

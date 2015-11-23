@@ -20,14 +20,14 @@ E-Mail: rion4ik@gmail.com XMPP: rion@jabber.ru
 */
 
 #include <QTimer>
+#include <QTextDocument>
 
 #include "storage/notestorage.h"
 
 namespace QtNote {
 
-bool noteListItemModifyComparer(const NoteListItem &a,
-                                const NoteListItem &b) {
-    return a.lastModify > b.lastModify; //backward order
+bool NoteUiComparer(const Note &a, const Note &b) {
+    return a.uiCmp(b); //backward order
 }
 
 NoteStorage::NoteStorage(QObject *parent)
@@ -46,8 +46,8 @@ void NoteFinder::start(const QString &text)
     auto nl = _storage->noteList();
     for (auto n : nl) {
         // text always returns plain text
-        if (_storage->note(n.id).text().contains(text)) {
-            emit found(n.id);
+        if (_storage->note(n.id()).plainText().indexOf(text, 0, Qt::CaseInsensitive)) {
+            emit found(n.id());
         }
     }
 

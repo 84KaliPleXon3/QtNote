@@ -19,29 +19,71 @@ Contacts:
 E-Mail: rion4ik@gmail.com XMPP: rion@jabber.ru
 */
 
+#include <QTextDocument>
+
 #include "storage/notedata.h"
 
 namespace QtNote {
 
-NoteData::NoteData()
+NoteData::NoteData(NoteStorage *storage)
 	: QSharedData()
+    , _storage(storage)
+    , _text(0)
 {
+}
+
+NoteData::NoteData(NoteStorage *storage, const QString &noteId)
+    : QSharedData()
+    , _id(noteId)
+    , _storage(storage)
+    , _text(0)
+{
+
+}
+
+QString NoteData::plainText()
+{
+    return document()->toPlainText();
+}
+
+QTextDocument *NoteData::document()
+{
+    if (!_text) {
+        load();
+    }
+    return _text;
+}
+
+void NoteData::setDocument(QTextDocument *doc)
+{
+    delete _text;
+    _text = doc;
+    if (doc) {
+        _title = doc->toPlainText().trimmed().section('\n', 0, 0).trimmed().left(NoteData::TitleLength);
+    }
+    save();
+}
+
+NoteData::~NoteData()
+{
+    delete _text;
 }
 
 QString NoteData::title() const
 {
-	return sTitle;
+    return _title;
 }
 
-QString NoteData::text() const
+void NoteData::setPlainText(const QString &text)
 {
-	return sText;
+    QString trimmed = text.trimmed();
+    document()->setPlainText(trimmed);
+    _title = trimmed.section('\n', 0, 0).trimmed().left(NoteData::TitleLength);
 }
 
-void NoteData::setText(const QString &text)
+QVariant NoteData::uiCmpValue() const
 {
-	sText = text.trimmed();
-	sTitle = sText.section('\n', 0, 0).trimmed().left(NoteData::TitleLength);
+    return _title;
 }
 
 }

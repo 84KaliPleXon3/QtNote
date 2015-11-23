@@ -19,31 +19,68 @@ Contacts:
 E-Mail: rion4ik@gmail.com XMPP: rion@jabber.ru
 */
 
-#include "storage/filenotedata.h"
 #include <QFile>
+#include <QTextDocument>
+
+#include "storage/filenotedata.h"
+#include "richtextadapter.h"
+#include "filestorage.h"
+#include "filenameprovider.h"
 
 namespace QtNote {
 
-FileNoteData::FileNoteData()
-	: NoteData()
-{
-
-}
-
 QDateTime FileNoteData::modifyTime() const
 {
-	return dtLastChange;
+    return _lastChange;
 }
 
 qint64 FileNoteData::lastChangeElapsed() const
 {
-	return dtLastChange.msecsTo(QDateTime::currentDateTime());
+    return _lastChange.msecsTo(QDateTime::currentDateTime());
 }
 
 void FileNoteData::remove()
 {
 	QFile f(sFileName);
-	f.remove();
+    f.remove();
+}
+
+QVariant FileNoteData::uiCmpValue() const
+{
+    return _lastChange;
+}
+
+bool FileNoteData::load()
+{
+    QFile f(sFileName);
+    if (f.open(QIODevice::ReadOnly | QIODevice::Text)) {
+        _text = new QTextDocument;
+        _storage->richTextAdapter()->populateDocumentFromData(_text, f.readAll());
+        return true;
+    }
+    return false;
+}
+
+void FileNoteData::saveData(const QByteArray &data)
+{
+    auto np = dynamic_cast<FileStorage*>(storage())->nameProvider;
+    QString filename, id;
+    if (_id.isEmpty()) {
+        filename = np->newName(*this, id);
+    } else {
+        filename = np->updateName(*this, id);
+    }
+
+    QFile file(filename);
+    if (!file.open(QIODevice::WriteOnly | QIODevice::Text)) {
+        qWarning("Failed to write: %s\n", qPrintable(file.errorString()));
+        return false;
+    }
+    file.write(data);
+    file.close();
+    _lastChange = QFileInfo(file).lastModified();
+    _id = id;
+    return true;
 }
 
 } // namespace QtNote
