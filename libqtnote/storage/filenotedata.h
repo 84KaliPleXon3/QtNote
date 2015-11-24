@@ -22,8 +22,10 @@ E-Mail: rion4ik@gmail.com XMPP: rion@jabber.ru
 #ifndef FILENOTEDATA_H
 #define FILENOTEDATA_H
 
-#include "storage/notedata.h"
 #include <QDateTime>
+#include <QIODevice>
+
+#include "storage/notedata.h"
 
 namespace QtNote {
 
@@ -45,8 +47,9 @@ public:
     QVariant uiCmpValue() const;
 
 protected:
+    bool open(QFile &f, QIODevice::OpenMode flags);
     bool load();
-    void saveData(const QByteArray &data);
+    bool saveData(const QByteArray &data);
 
 protected:
     QDateTime _lastChange;
