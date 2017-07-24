@@ -109,13 +109,21 @@ bool HunspellEngine::addLanguage(const QLocale &locale)
     if (scanDictPaths(language, aff, dic)) {
         LangItem li;
         //qDebug() << "Add hunspell:" << aff.absoluteFilePath() << dic.absoluteFilePath();
-        li.hunspell = new Hunspell(aff.absoluteFilePath().toLocal8Bit(),
-                          dic.absoluteFilePath().toLocal8Bit());
-        li.codec = QTextCodec::codecForName(QByteArray(li.hunspell->get_dic_encoding()));
-        li.info.language = locale.language();
-        li.info.country = locale.country();
-        li.info.filename = dic.filePath();
-        languages.append(li);
+        QByteArray codecName(li.hunspell_->get_dic_encoding());
+		if (codecName.startsWith("microsoft-cp125")) {
+			codecName.replace(0, sizeof("microsoft-cp") - 1, "Windows-");
+		} else if (codecName.startsWith("TIS620-2533")) {
+			codecName.resize(sizeof("TIS620") - 1);
+		}
+		li.codec = QTextCodec::codecForName(codecName);
+		if (li.codec) {
+			li.info.language = locale.language();
+			li.info.country = locale.country();
+			li.info.filename = dic.filePath();
+			languages_.append(li);
+		} else {
+			qDebug("Unsupported myspell dict encoding: \"%s\" for %s", codecName.data(), qPrintable(dic.fileName()));
+		}
         return true;
     }
     return false;
