@@ -109,18 +109,21 @@ bool HunspellEngine::addLanguage(const QLocale &locale)
     if (scanDictPaths(language, aff, dic)) {
         LangItem li;
         //qDebug() << "Add hunspell:" << aff.absoluteFilePath() << dic.absoluteFilePath();
-        QByteArray codecName(li.hunspell_->get_dic_encoding());
-		if (codecName.startsWith("microsoft-cp125")) {
-			codecName.replace(0, sizeof("microsoft-cp") - 1, "Windows-");
-		} else if (codecName.startsWith("TIS620-2533")) {
-			codecName.resize(sizeof("TIS620") - 1);
-		}
-		li.codec = QTextCodec::codecForName(codecName);
+
+        li.hunspell = new Hunspell(aff.absoluteFilePath().toLocal8Bit(),
+                          dic.absoluteFilePath().toLocal8Bit());
+        QByteArray codecName(li.hunspell->get_dic_encoding());
+        if (codecName.startsWith("microsoft-cp125")) {
+            codecName.replace(0, sizeof("microsoft-cp") - 1, "Windows-");
+        } else if (codecName.startsWith("TIS620-2533")) {
+            codecName.resize(sizeof("TIS620") - 1);
+        }
+        li.codec = QTextCodec::codecForName(codecName);
 		if (li.codec) {
 			li.info.language = locale.language();
 			li.info.country = locale.country();
 			li.info.filename = dic.filePath();
-			languages_.append(li);
+			languages.append(li);
 		} else {
 			qDebug("Unsupported myspell dict encoding: \"%s\" for %s", codecName.data(), qPrintable(dic.fileName()));
 		}
@@ -135,7 +138,8 @@ bool HunspellEngine::spell(const QString &word) const
         return true;
     }
     foreach (const LangItem &li, languages) {
-        if (li.hunspell->spell(li.codec->fromUnicode(word)) != 0) {
+        auto ba = li.codec->fromUnicode(word); // byte array in dict's encoding
+        if (li.hunspell->spell(std::string(ba.data(), size_t(ba.size()))) != 0) {
             return true;
         }
     }
@@ -151,12 +155,11 @@ QList<QString> HunspellEngine::suggestions(const QString& word)
 {
     QStringList qtResult;
     foreach (const LangItem &li, languages) {
-        char **result;
-        int sugNum = li.hunspell->suggest(&result, li.codec->fromUnicode(word));
-        for (int i=0; i < sugNum; i++) {
-            qtResult << li.codec->toUnicode(result[i]);
+        auto result = li.hunspell->suggest(std::string(li.codec->fromUnicode(word)));
+        for (auto &s : result) {
+            QByteArray ba(s.data(), int(s.size()));
+            qtResult << li.codec->toUnicode(ba);
         }
-        li.hunspell->free_list(&result, sugNum);
     }
     return qtResult;
 }

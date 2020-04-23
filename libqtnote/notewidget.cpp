@@ -10,6 +10,7 @@
 #include <QToolButton>
 #include <QPalette>
 #include <QMenu>
+#include <QStyle>
 #if QT_VERSION >= 0x050400
 # include <QGuiApplication>
 #endif
@@ -118,10 +119,8 @@ static struct MakeVSHappy {
 
 NoteWidget::NoteWidget(const QString &storageId, const QString &noteId) :
     ui(new Ui::NoteWidget),
-    _highlighter(0),
     _storageId(storageId),
-    _noteId(noteId),
-    _trashRequested(false)
+    _noteId(noteId)
 {
     ui->setupUi(this);
 
@@ -191,7 +190,7 @@ NoteWidget::NoteWidget(const QString &storageId, const QString &noteId) :
     connect(ui->noteEdit, SIGNAL(focusLost()), SLOT(save()));
     connect(ui->noteEdit, SIGNAL(focusReceived()), SLOT(focusReceived()), Qt::QueuedConnection);
 #if QT_VERSION >= 0x050400
-    connect(qGuiApp, &QGuiApplication::paletteChanged,
+    connect(qGuiApp, &QGuiApplication::paletteChanged, this,
             [this](const QPalette &) { updateFirstLineColor(); });
 #endif
 }
